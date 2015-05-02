@@ -14,21 +14,21 @@ describe OracleOfBacon do
     describe 'when only From is specified' do
       subject { @orb.from = 'Carrie Fisher' ; @orb }
       it { should be_valid }
-      its(:from) { should == 'Carrie Fisher' }
-      its(:to)   { should == 'Kevin Bacon' }
+      it {subject.from.should eq('Carrie Fisher')}
+      it {subject.to.should eq('Kevin Bacon')}
     end
     describe 'when only To is specified' do
       subject { @orb.to = 'Ian McKellen' ; @orb }
       it { should be_valid }
-      its(:from) { should == 'Kevin Bacon' }
-      its(:to)   { should == 'Ian McKellen'}
+      it {subject.from.should eq('Kevin Bacon')}
+      it {subject.to.should eq('Ian McKellen')}
     end
     describe 'when From and To are both specified' do
       context 'and distinct' do
         subject { @orb.to = 'Ian McKellen' ; @orb.from = 'Carrie Fisher' ; @orb }
         it { should be_valid }
-        its(:from) { should == 'Carrie Fisher' }
-        its(:to)   { should == 'Ian McKellen'  }
+        it {subject.from.should eq('Carrie Fisher')}
+        it {subject.to.should eq('Ian McKellen')}
       end
       context 'and the same' do
         subject {  @orb.to = @orb.from = 'Ian McKellen' ; @orb }
@@ -39,32 +39,32 @@ describe OracleOfBacon do
   describe 'parsing XML response', :pending => true do
     describe 'for unauthorized access/invalid API key' do
       subject { OracleOfBacon::Response.new(File.read 'spec/unauthorized_access.xml') }
-      its(:type) { should == :error }
-      its(:data) { should == 'Unauthorized access' }
+      it {subject.type.should eq(:error)}
+      it {subject.data.should eq('Unauthorized access')}
     end
-    describe 'for a normal match' do
+    describe 'for a normal match', :pending => false do
       subject { OracleOfBacon::Response.new(File.read 'spec/graph_example.xml') }
-      its(:type) { should == :graph }
-      its(:data) { should == ['Carrie Fisher', 'Under the Rainbow (1981)',
-                              'Chevy Chase', 'Doogal (2006)', 'Ian McKellen'] }
+      it {subject.type.should eq(:graph)}
+      it {subject.data.should eq(['Carrie Fisher', 'Under the Rainbow (1981)',
+                              'Chevy Chase', 'Doogal (2006)', 'Ian McKellen'])}
     end
-    describe 'for a normal match (backup)' do
+    describe 'for a normal match (backup)', :pending => false do
       subject { OracleOfBacon::Response.new(File.read 'spec/graph_example2.xml') }
-      its(:type) { should == :graph }
-      its(:data) { should == ["Ian McKellen", "Doogal (2006)", "Kevin Smith (I)",
-                              "Fanboys (2009)", "Carrie Fisher"] }
+      it {subject.type.should eq(:graph)}
+      it {subject.data.should eq(["Ian McKellen", "Doogal (2006)", "Kevin Smith (I)",
+                              "Fanboys (2009)", "Carrie Fisher"])}
     end
-    describe 'for a spellcheck match' do
+    describe 'for a spellcheck match', :pending => false do
       subject { OracleOfBacon::Response.new(File.read 'spec/spellcheck_example.xml') }
-      its(:type) { should == :spellcheck }
-      its(:data) { should have(34).elements }
-      its(:data) { should include('Anthony Perkins (I)') }
-      its(:data) { should include('Anthony Parkin') }
+      it{subject.type.should eq(:spellcheck)}
+      it{subject.data.should have(34).elements}
+      it{subject.data.should include('Anthony Perkins (I)')}
+      it{subject.data.should include('Anthony Parkin')}
     end
-    describe 'for unknown response' do
+    describe 'for unknown response', :pending => false do
       subject { OracleOfBacon::Response.new(File.read 'spec/unknown.xml') }
-      its(:type) { should == :unknown }
-      its(:data) { should match /unknown/i }
+      it{subject.type.should eq(:unknown)}
+      it{subject.data.should match(/unknown/i)}
     end
   end
   describe 'constructing URI', :pending => true do
